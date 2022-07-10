@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Product</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css">
+
+    <style>
+        button{
+            background-color:#3CB371;
+            border: #3CB371;
+            color: white;
+            height: 30px;
+        }
+    </style>
+</head>
+<body>
+<h3>Add New Product</h3>
+<div style="background-color: #F0F0F0; padding: 20px 0px 20px 0px; width: 40%">
+    <input id="newProduct" placeholder="New Product" type="text">
+    <button onclick="createProduct()">Add</button>
+    <input id="search" placeholder="Search Product" type="text" oninput="actionSearch()">
+    <span id="validate"></span>
+</div>
+
+
+<h3 style="margin-top: 40px">Display All Products</h3>
+<table class="table table-striped table-hover" border="1" style="width: 100%; text-align: center">
+    <th>NUMBER</th>
+    <th>PRODUCT NAME</th>
+    <th>EDIT</th>
+    <th>DELETE</th>
+    <tbody id="drawTable">
+    </tbody>
+</table>
+
+<script>
+    let listProducts = ['Sony Xperia', 'Samsung Galaxy', 'Nokia 6', 'Xiaomi Redmi Note 4', 'Apple Iphone 6S']
+    let listSearch = [];
+    function showListProduct() {
+        let drawTable = '';
+        for (let i = 0; i < listProducts.length; i++) {
+            let j = i + 1;
+            // drawTable+= '<tr>'+
+            //     '<td>'+j+'</td>'+
+            //     '<td>'+listProduct[i]+'</td>'
+            // +'</tr>'
+
+            drawTable += `<tr>
+                        <td>${j}</td>
+                        <td>${listProducts[i]}</td>
+                        <td><button class="tbn btn-primary" style=" border-radius: 50%" onclick="updateProduct(${i})"><i class="bi bi-pen-fill"></i></button></td>
+                         <td><button class="btn btn-danger" style="border-radius:50%" onclick="deleteProduct(${i})"><i class="bi bi-backspace-fill"></i></i></button></td>
+                        </tr>`
+        }
+        document.getElementById('drawTable').innerHTML = drawTable;
+    }
+
+    showListProduct();
+
+    function createProduct() {
+        let newProduct = document.getElementById('newProduct').value;
+        if (newProduct.trim() === '') {
+            document.getElementById('validate').innerHTML = '<span style="color: red">The name is required! Please try again!</span>'
+        } else {
+            console.log('newProduct ===>', newProduct)
+            listProducts.push(newProduct);
+            document.getElementById('validate').innerHTML = '<span style="color: blue">Create Success!!</span>'
+            showListProduct();
+        }
+    }
+    function updateProduct(id) {
+        console.log('id ===========', id)
+        let editProduct = prompt('Enter the name to update Product', listProducts[id])
+        if(editProduct.trim()===''){
+            document.getElementById('validate').innerHTML = '<span style="color: red">The name is required! Please try again!</span>'
+        } else {
+            listProducts[id] = editProduct;
+            document.getElementById('validate').innerHTML = '<span style="color: blueviolet">Update Success!!</span>'
+            showListProduct();
+        }
+    }
+    function deleteProduct(id) {
+        listProducts.splice(id,1)
+        showListProduct()
+    }
+    function showListSearch() {
+        let drawTable = '';
+        for (let i = 0; i < listSearch.length; i++) {
+            let j = i + 1;
+            // drawTable+= '<tr>'+
+            //     '<td>'+j+'</td>'+
+            //     '<td>'+listProduct[i]+'</td>'
+            // +'</tr>'
+            drawTable += `<tr>
+                        <td>${j}</td>
+                        <td>${listSearch[i]}</td>
+                        <td><button style="background-color: blue; color: white; border-radius: 20%" onclick="updateProduct(${i})">Edit</button></td>
+                         <td><button style="background-color: red; color: white; border-radius: 20%" onclick="deleteProduct(${i})">Delete</button></td>
+                        </tr>`
+        }
+        document.getElementById('drawTable').innerHTML = drawTable;
+    }
+    function actionSearch() {
+        let search = document.getElementById('search').value;
+        listSearch = [];
+        console.log('value search ----> ',search)
+        if(search.trim()===''){
+            showListProduct();
+            return;
+        }
+        for (let i = 0; i < listProducts.length; i++) {
+            if(search.toLowerCase()===listProducts[i].toLowerCase()){
+                listSearch.push(listProducts[i])
+            }
+        }
+        showListSearch();
+    }
+</script>
+</body>
+</html>
